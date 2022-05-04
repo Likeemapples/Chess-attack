@@ -18,6 +18,7 @@ class ControllerVar:
     click = False
     chestloot = -1
     bulletlist = []
+    hitboxes = False
 
 class TimerVar:
     chest_passed = True
@@ -26,3 +27,4 @@ class TimerVar:
     text_init = time.time()
     shoot_init = time.time()
     move_init = time.time()
+    canMove = True

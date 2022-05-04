@@ -67,7 +67,7 @@ class Images:
 
     loadking = pygame.image.load('Assets\Chess Pieces\Enemy King.png').convert()
     loadking.set_colorkey((0,0,0))
-    king = pygame.transform.scale(loadpawn, (size,size))
+    king = pygame.transform.scale(loadking, (size,size))
 
     loadknight = pygame.image.load('Assets\Chess Pieces\Enemy Knight.png').convert()
     loadknight.set_colorkey((0,0,0))
