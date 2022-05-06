@@ -19,6 +19,13 @@ class Images:
     loadwall.set_colorkey((0,0,0))
     wall = pygame.transform.scale(loadwall, (size,size))
 
+    loadstairs = pygame.image.load('Assets\Misc\stair_placeholder.png').convert()
+    stairs = pygame.transform.scale(loadstairs, (size,size))
+
+    loadladder = pygame.image.load('Assets\Misc\Ladder.png').convert()
+    loadladder.set_colorkey((0,0,0))
+    ladder = pygame.transform.scale(loadladder, (size,size))
+
     # Points 
     loadpt1 = pygame.image.load('Assets\Misc\plus_one.png').convert()
     loadpt1.set_colorkey((0,0,0))

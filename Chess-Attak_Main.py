@@ -25,26 +25,33 @@ size = round(WINDOW_SIZE[1]/9)
 
 boardRect = pygame.Rect(0 + size+90*3, size,size*7,size*7)
 
-objectlist = [
-    [0, [1,0],Images.chest,0], 
-    [1, [2,0],Images.refugee,1,[0,1,2,3,4],Voices.refugee],
-    [1, [2,1],Images.refugee,2,[0,1,5,6],Voices.refugee],
-    [1, [2,2],Images.refugee,3,[0,7],Voices.deepvoiceText],
-    [1, [2,3],Images.refugee,4,[8,9],Voices.deepvoiceText],
-    [2, [4,0],Images.pawn,5,"Pawn"],
-    [2, [4,5],Images.rook,6,"Rook"],
-    [2, [4,6],Images.bishop,7,"Bishop"],
-    [2, [4,7],Images.queen,8,"Queen"],
-    [2, [4,3],Images.king,9,"King"],
-    [2, [4,2],Images.knight,9,"Knight"],
-    #[3, [4,1],Images.wall]
-    ] 
-    # object(object type, object pos(object x, object y), image, count, nbt) # [0,[1,0],chest,0,1]
-
+worldMap = [
+    [
+        [-1, PlayerVar.defaultposition[0]],
+        [0, [1,0],Images.chest,0], 
+        [1, [2,0],Images.refugee,1,[0,1,2,3,4],Voices.refugee],
+        [1, [2,1],Images.refugee,2,[0,1,5,6],Voices.refugee],
+        [1, [2,2],Images.refugee,3,[0,7],Voices.deepvoiceText],
+        [1, [2,3],Images.refugee,4,[8,9],Voices.deepvoiceText],
+        [4, [5,0],Images.stairs]
+    ],
+    [
+        [-1, PlayerVar.defaultposition[1]],
+        [2, [4,0],Images.pawn,5,"Pawn"],
+        [2, [4,5],Images.rook,6,"Rook"],
+        [2, [4,6],Images.bishop,7,"Bishop"],
+        [2, [4,7],Images.queen,8,"Queen"],
+        [2, [4,3],Images.king,9,"King"],
+        [2, [4,2],Images.knight,9,"Knight"],
+        [5, [5,1],Images.ladder]
+    ]
+] # object(object type, object pos(object x, object y), image, count, nbt) # [0,[1,0],chest,0,1]
 
 # Game Loop
 while True:
     
+    objectlist = worldMap[ControllerVar.currentMap] 
+
     start = time.time()
     # Events
     
@@ -58,13 +65,13 @@ while True:
                 sys.exit()
             if not Text.txtopen:
                 if event.key == K_d or event.key == K_RIGHT: 
-                    PlayerVar.playerstats[0] += 1
+                    PlayerVar.playerposition[0] += 1
                 if event.key == K_a or event.key == K_LEFT:
-                    PlayerVar.playerstats[0] -= 1
+                    PlayerVar.playerposition[0] -= 1
                 if event.key == K_w or event.key == K_UP:
-                    PlayerVar.playerstats[1] -= 1
+                    PlayerVar.playerposition[1] -= 1
                 if event.key == K_s or event.key == K_DOWN:
-                    PlayerVar.playerstats[1] += 1
+                    PlayerVar.playerposition[1] += 1
             if event.key == K_z:
                 Text.globalnum = 0
                 Text.globalstring = ""
@@ -106,14 +113,14 @@ while True:
 
 
     # Handle Chess    
-    if PlayerVar.playerstats[0] < 0:
-        PlayerVar.playerstats[0] = 0
-    if PlayerVar.playerstats[0] > 7:
-        PlayerVar.playerstats[0] = 7
-    if PlayerVar.playerstats[1] < 0:
-        PlayerVar.playerstats[1] = 0
-    if PlayerVar.playerstats[1] > 7:
-        PlayerVar.playerstats[1] = 7
+    if PlayerVar.playerposition[0] < 0:
+        PlayerVar.playerposition[0] = 0
+    if PlayerVar.playerposition[0] > 7:
+        PlayerVar.playerposition[0] = 7
+    if PlayerVar.playerposition[1] < 0:
+        PlayerVar.playerposition[1] = 0
+    if PlayerVar.playerposition[1] > 7:
+        PlayerVar.playerposition[1] = 7
 
     for tile in ChessVar.chesstiles:
         rect = tile[3]
@@ -127,23 +134,21 @@ while True:
     # Initialize and Handle Objects
     for obj in objectlist:
         temp_rect = pygame.Rect((obj[1][0]*80)+(90*3.5),(obj[1][1]*80)+40,size,size)
-        # if obj[0] == 2:
-        #     temp_rect.y -= 20
-        #     screen.blit(obj[2],temp_rect)
-        #     if ControllerVar.hitboxes:
-        #         pygame.draw.rect(screen,(0,0,255),temp_rect,1)
-        if obj[0] == 0 or obj[0] == 3:
+        if obj[0] == 0 or obj[0] == 3 or obj[0] == 4 or obj[0] == 5:
             screen.blit(obj[2],temp_rect)
             if ControllerVar.hitboxes:
                 pygame.draw.rect(screen,(0,0,255),temp_rect,1)
-        else:
+        elif obj[0] != -1:
             temp_rect.y -= 20
             screen.blit(obj[2],temp_rect)
             if ControllerVar.hitboxes:
                 pygame.draw.rect(screen,(0,0,255),temp_rect,1)
         
-
-        if PlayerVar.playerstats[0] == obj[1][0] and PlayerVar.playerstats[1] == obj[1][1]:
+        match obj[0]:
+            case -1: # Player
+                PlayerVar.playerposition = PlayerVar.defaultposition[ControllerVar.currentMap]
+                PlayerVar.defaultposition[ControllerVar.currentMap] = PlayerVar.playerposition
+        if PlayerVar.playerposition[0] == obj[1][0] and PlayerVar.playerposition[1] == obj[1][1]:
             match obj[0]:
                 case 0: # Chest
                     ControllerVar.chestloot = random.randrange(0,100)
@@ -162,12 +167,20 @@ while True:
                     Text.nbt = obj[4]
                     Text.voice = obj[5]
                     Text.txtopen = True
-                    PlayerVar.playerstats[0], PlayerVar.playerstats[1] = PlayerVar.prevspot
+                    PlayerVar.playerposition[0], PlayerVar.playerposition[1] = PlayerVar.prevspot
                 case 2: # Enemy
-                    PlayerVar.playerstats[0], PlayerVar.playerstats[1] = PlayerVar.prevspot
+                    PlayerVar.playerposition[0], PlayerVar.playerposition[1] = PlayerVar.prevspot
                     objectlist.remove(obj)
                 case 3: # Wall
-                    PlayerVar.playerstats[0], PlayerVar.playerstats[1] = PlayerVar.prevspot
+                    PlayerVar.playerposition[0], PlayerVar.playerposition[1] = PlayerVar.prevspot
+                case 4: # Stairs
+                    PlayerVar.playerposition[0], PlayerVar.playerposition[1] = PlayerVar.prevspot
+                    ControllerVar.currentMap += 1
+                    ControllerVar.bulletlist = []
+                case 5: # Stairs
+                    PlayerVar.playerposition[0], PlayerVar.playerposition[1] = PlayerVar.prevspot
+                    ControllerVar.currentMap -= 1
+                    ControllerVar.bulletlist = []
                     
     if TimerVar.shoot_init + 1.5 <= time.time():
         for obj in objectlist:
@@ -180,7 +193,7 @@ while True:
             if obj[0] == 2:
                 if obj[4] == "Pawn":
                     for obj1 in objectlist:
-                        if obj[1][1] == obj1[1][1]:
+                        if obj[1][1] + 1 == obj1[1][1] and obj[1][0] == obj1[1][0] and obj != obj1:
                             TimerVar.canMove = False
                     if obj[1][1] != 7 and TimerVar.canMove:
                         obj[1][1] += 1
@@ -188,9 +201,9 @@ while True:
 
 
     # Handle Player
-    PlayerVar.playerrect.x = ((PlayerVar.playerstats[0]*80)+(90*3.5))+(size/3)
-    PlayerVar.playerrect.y = ((PlayerVar.playerstats[1]*80+40))+(size/3)
-    screen.blit(Images.player,((PlayerVar.playerstats[0]*80)+(90*3.5),PlayerVar.playerstats[1]*80+40-20))
+    PlayerVar.playerrect.x = ((PlayerVar.playerposition[0]*80)+(90*3.5))+(size/3)
+    PlayerVar.playerrect.y = ((PlayerVar.playerposition[1]*80+40))+(size/3)
+    screen.blit(Images.player,((PlayerVar.playerposition[0]*80)+(90*3.5),PlayerVar.playerposition[1]*80+40-20))
     if ControllerVar.hitboxes:
         pygame.draw.rect(screen,(0,255,0),PlayerVar.playerrect,1)
 
@@ -310,8 +323,11 @@ while True:
         if not rect.colliderect(boardRect):
             ControllerVar.bulletlist.remove(bullet)
 
+        if rect.colliderect(PlayerVar.playerrect):
+            PlayerVar.points -= 1
+
     # Reset variables
-    PlayerVar.prevspot = PlayerVar.playerstats[0], PlayerVar.playerstats[1]
+    PlayerVar.prevspot = PlayerVar.playerposition[0], PlayerVar.playerposition[1]
     ControllerVar.click = False
 
 

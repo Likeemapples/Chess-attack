@@ -11,16 +11,16 @@ size = round(WINDOW_SIZE[1]/9)
 class Chest:
     def handleChest():
         if ControllerVar.chestloot >= 0 and ControllerVar.chestloot < 40:
-            screen.blit(Images.pt1, ((PlayerVar.playerstats[0]*80)+(90*3.5),PlayerVar.playerstats[1]*80+40-20))
+            screen.blit(Images.pt1, ((PlayerVar.playerposition[0]*80)+(90*3.5),PlayerVar.playerposition[1]*80+40-20))
             TimerVar.chest_passed = False
         if ControllerVar.chestloot >= 40 and ControllerVar.chestloot < 80:
-            screen.blit(Images.pt2, ((PlayerVar.playerstats[0]*80)+(90*3.5),PlayerVar.playerstats[1]*80+40-20))
+            screen.blit(Images.pt2, ((PlayerVar.playerposition[0]*80)+(90*3.5),PlayerVar.playerposition[1]*80+40-20))
             TimerVar.chest_passed = False
         if ControllerVar.chestloot >= 80 and ControllerVar.chestloot < 95:
-            screen.blit(Images.pt5, ((PlayerVar.playerstats[0]*80)+(90*3.5),PlayerVar.playerstats[1]*80+40-20))
+            screen.blit(Images.pt5, ((PlayerVar.playerposition[0]*80)+(90*3.5),PlayerVar.playerposition[1]*80+40-20))
             TimerVar.chest_passed = False
         if ControllerVar.chestloot >= 95 and ControllerVar.chestloot < 100:
-            screen.blit(Images.pt10, ((PlayerVar.playerstats[0]*80)+(90*3.5),PlayerVar.playerstats[1]*80+40-20))
+            screen.blit(Images.pt10, ((PlayerVar.playerposition[0]*80)+(90*3.5),PlayerVar.playerposition[1]*80+40-20))
             TimerVar.chest_passed = False
 
         if TimerVar.chest_init + 1.5 <= time.time() and not TimerVar.chest_passed:

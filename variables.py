@@ -9,7 +9,8 @@ class ChessVar:
     tilecount = 0
 
 class PlayerVar:
-    playerstats = [0,0,[0,0]] # board x, board y, area(area x, area y)
+    playerposition = [0,0] # board x, board y, area(area x, area y)
+    defaultposition = [[0,0],[5,0]]
     prevspot = []
     playerrect = pygame.Rect(0,0,size/3,size/3)
     points = 15
@@ -19,6 +20,7 @@ class ControllerVar:
     chestloot = -1
     bulletlist = []
     hitboxes = False
+    currentMap = 0
 
 class TimerVar:
     chest_passed = True
