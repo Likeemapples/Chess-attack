@@ -21,6 +21,9 @@ class ControllerVar:
     bulletlist = []
     hitboxes = False
     currentMap = 0
+    tick = 0
+    tickrule = 0
+    sametickrule = False
 
 class TimerVar:
     chest_passed = True

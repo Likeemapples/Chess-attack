@@ -34,5 +34,8 @@ class Text:
         "Testy Test Mc Test Face",
         "{ @ }",
         "Text box test",
-        "It is very cool"
+        "It is very cool",
+        "19 dollar fortnite giftcard",
+        "Who wants it?",
+        "And yes, I am giving it away"
         ]

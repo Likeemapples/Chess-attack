@@ -31,7 +31,7 @@ worldMap = [
         [0, [1,0],Images.chest,0], 
         [1, [2,0],Images.refugee,1,[0,1,2,3,4],Voices.refugee],
         [1, [2,1],Images.refugee,2,[0,1,5,6],Voices.refugee],
-        [1, [2,2],Images.refugee,3,[0,7],Voices.deepvoiceText],
+        [1, [2,2],Images.refugee,3,[10,11,12],Voices.deepvoiceText],
         [1, [2,3],Images.refugee,4,[8,9],Voices.deepvoiceText],
         [4, [5,0],Images.stairs]
     ],
@@ -72,7 +72,7 @@ while True:
                     PlayerVar.playerposition[1] -= 1
                 if event.key == K_s or event.key == K_DOWN:
                     PlayerVar.playerposition[1] += 1
-            if event.key == K_z:
+            if event.key == K_z and Text.txtopen:
                 Text.globalnum = 0
                 Text.globalstring = ""
                 Text.nbtNum += 1
@@ -182,13 +182,13 @@ while True:
                     ControllerVar.currentMap -= 1
                     ControllerVar.bulletlist = []
                     
-    if TimerVar.shoot_init + 1.5 <= time.time():
+    if ControllerVar.tickrule % 2 == 0 and ControllerVar.sametickrule == False:
         for obj in objectlist:
             if obj[0] == 2:
                 enemyShoot(obj[4],obj)
                 TimerVar.shoot_init = time.time()
     
-    if TimerVar.move_init + 3 <= time.time():
+    if ControllerVar.tickrule % 4 == 0 and ControllerVar.sametickrule == False:
         for obj in objectlist:
             if obj[0] == 2:
                 if obj[4] == "Pawn":
@@ -312,6 +312,7 @@ while True:
             case 15:
                 change[0] -= 1
                 change[1] -= 0.5
+                
 
 
         if abs(change[0]) >= size*distance or abs(change[1]) >= size*distance:
@@ -322,16 +323,26 @@ while True:
 
         if not rect.colliderect(boardRect):
             ControllerVar.bulletlist.remove(bullet)
-
-        if rect.colliderect(PlayerVar.playerrect):
-            PlayerVar.points -= 1
+        if ControllerVar.tick % 47 == 0:
+            if rect.colliderect(PlayerVar.playerrect):
+                PlayerVar.points -= 1
 
     # Reset variables
     PlayerVar.prevspot = PlayerVar.playerposition[0], PlayerVar.playerposition[1]
     ControllerVar.click = False
 
+    if ControllerVar.tick >= 240:
+        ControllerVar.tick = 0
+        if ControllerVar.tickrule >= 5:
+            ControllerVar.tickrule = 0
+            ControllerVar.sametickrule = False
+        else:
+            ControllerVar.tickrule += 1
+            ControllerVar.sametickrule = False
+    else:
+        ControllerVar.tick += 1
+        ControllerVar.sametickrule = True
 
     pygame.display.flip()
-    print(len(ControllerVar.bulletlist))
     end = time.time()
-    print("elapsed time:" + str(end-start))
+    print(ControllerVar.tick, ControllerVar.tickrule, len(ControllerVar.bulletlist), "elapsed time:" + str(end-start))

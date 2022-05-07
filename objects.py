@@ -12,20 +12,14 @@ class Chest:
     def handleChest():
         if ControllerVar.chestloot >= 0 and ControllerVar.chestloot < 40:
             screen.blit(Images.pt1, ((PlayerVar.playerposition[0]*80)+(90*3.5),PlayerVar.playerposition[1]*80+40-20))
-            TimerVar.chest_passed = False
         if ControllerVar.chestloot >= 40 and ControllerVar.chestloot < 80:
             screen.blit(Images.pt2, ((PlayerVar.playerposition[0]*80)+(90*3.5),PlayerVar.playerposition[1]*80+40-20))
-            TimerVar.chest_passed = False
         if ControllerVar.chestloot >= 80 and ControllerVar.chestloot < 95:
             screen.blit(Images.pt5, ((PlayerVar.playerposition[0]*80)+(90*3.5),PlayerVar.playerposition[1]*80+40-20))
-            TimerVar.chest_passed = False
         if ControllerVar.chestloot >= 95 and ControllerVar.chestloot < 100:
             screen.blit(Images.pt10, ((PlayerVar.playerposition[0]*80)+(90*3.5),PlayerVar.playerposition[1]*80+40-20))
-            TimerVar.chest_passed = False
-
-        if TimerVar.chest_init + 1.5 <= time.time() and not TimerVar.chest_passed:
+        if ControllerVar.tickrule % 2 == 0 and ControllerVar.sametickrule == False:
             ControllerVar.chestloot = -1
-            TimerVar.chest_passed = True
         text = Text.font.render(str(PlayerVar.points), False, (255,255,255))
         screen.blit(text,Text.textRect)
 
@@ -37,14 +31,14 @@ class Refugee:
                 if Text.globalnum < len(Text.Dialougues[Text.nbt[Text.nbtNum]]):
                     CurrentDialougue = Text.Dialougues[Text.nbt[Text.nbtNum]]
                     if CurrentDialougue[Text.globalnum] != " " and len(CurrentDialougue) > Text.globalnum:
-                        if TimerVar.text_init + 0.07 <= time.time():
+                        if ControllerVar.tick % 19 == 0:
                             Text.globalstring += CurrentDialougue[Text.globalnum]
                             Text.globalnum += 1
                             pygame.mixer.Sound.stop(Text.voice)
                             pygame.mixer.Sound.play(Text.voice, 0, 0, 0)
                             TimerVar.text_init = time.time()
                     else:
-                        if TimerVar.text_init + 0.15 <= time.time():
+                        if ControllerVar.tick % 19 == 0:
                             Text.globalstring += CurrentDialougue[Text.globalnum]
                             Text.globalnum += 1
                             TimerVar.text_init = time.time()
