@@ -1,9 +1,8 @@
 import pygame, time
 from pygame.locals import *
-from variables import PlayerVar
+from variables import PlayerVar, ControllerVar
 pygame.init()
-WINDOW_SIZE = (1280,720)
-size = round(WINDOW_SIZE[1]/9)
+
 
 class Voices:
     refugee = pygame.mixer.Sound('Audio\Speech\Refugee.wav')
@@ -12,11 +11,11 @@ class Voices:
     deepvoiceText.set_volume(0.5)
 
 class Text:
-    font = pygame.font.Font('Assets\Fonts\Alkhemikal.ttf', 48)
+    font = pygame.font.Font('Assets\Fonts\Alkhemikal.ttf', 64)
     text = font.render(str(PlayerVar.points), True, (255,255,255))
     textRect = text.get_rect()
-    textRect.x = 1000
-    textRect.y = 0
+    textRect.x = ControllerVar.WINDOW_SIZE[0]/1.3
+    textRect.y = ControllerVar.WINDOW_SIZE[1]/15
     txtopen = False
     globalnum = 0
     globalstring = ""

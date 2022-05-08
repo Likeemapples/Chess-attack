@@ -1,19 +1,6 @@
 import pygame, time
 from pygame.locals import *
 pygame.init()
-WINDOW_SIZE = (1280,720)
-size = round(WINDOW_SIZE[1]/9)
-
-class ChessVar:
-    chesstiles = [] # Chess Board
-    tilecount = 0
-
-class PlayerVar:
-    playerposition = [0,0] # board x, board y, area(area x, area y)
-    defaultposition = [[0,0],[5,0]]
-    prevspot = []
-    playerrect = pygame.Rect(0,0,size/3,size/3)
-    points = 15
 
 class ControllerVar:
     click = False
@@ -24,12 +11,26 @@ class ControllerVar:
     tick = 0
     tickrule = 0
     sametickrule = False
+    screen = pygame.display.set_mode((1920,1080), pygame.RESIZABLE)
+    WINDOW_SIZE = (pygame.display.get_surface().get_size())
+    size = round(WINDOW_SIZE[1]/9)
+    gameover = False
+
+class ChessVar:
+    chesstiles = [] # Chess Board
+    tilecount = 0
+    worldMap = []
+    objectlist = []
+
+class PlayerVar:
+    playerposition = [0,0] # board x, board y, area(area x, area y)
+    defaultposition = [[0,0],[5,0],[4,3]]
+    prevspot = []
+    playerrect = pygame.Rect(0,0,ControllerVar.size/3,ControllerVar.size/3)
+    points = 15
+    isHurt = False
+    biome = "Default"
 
 class TimerVar:
-    chest_passed = True
-    chest_init = time.time()
-    text_passed = True
-    text_init = time.time()
-    shoot_init = time.time()
-    move_init = time.time()
+    tick_init = time.time()
     canMove = True

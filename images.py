@@ -1,90 +1,134 @@
 import pygame
 from pygame.locals import *
 pygame.init()
-WINDOW_SIZE = (1280,720)
-screen = pygame.display.set_mode(WINDOW_SIZE, 0, 32)
-size = round(WINDOW_SIZE[1]/9)
+from variables import *
 
 class Images:
     # Objects
     loadchest = pygame.image.load('Assets\Misc\Chest.png').convert()
     loadchest.set_colorkey((0,0,0))
-    chest = pygame.transform.scale(loadchest, (size,size))
+    chest = pygame.transform.scale(loadchest, (ControllerVar.size,ControllerVar.size))
 
     loadrefugee = pygame.image.load('Assets\Chess Pieces\BeatenPawn.png').convert()
     loadrefugee.set_colorkey((0,0,0))
-    refugee = pygame.transform.scale(loadrefugee, (size,size))
+    refugee = pygame.transform.scale(loadrefugee, (ControllerVar.size,ControllerVar.size))
 
     loadwall = pygame.image.load('Assets\Tiles\Dark Stone.png').convert()
     loadwall.set_colorkey((0,0,0))
-    wall = pygame.transform.scale(loadwall, (size,size))
+    wall = pygame.transform.scale(loadwall, (ControllerVar.size,ControllerVar.size))
 
-    loadstairs = pygame.image.load('Assets\Misc\stair_placeholder.png').convert()
-    stairs = pygame.transform.scale(loadstairs, (size,size))
+    loadstairs = pygame.image.load('Assets\Tiles\Trapdoor.png').convert()
+    loadstairs.set_colorkey((0,0,0))
+    stairs = pygame.transform.scale(loadstairs, (ControllerVar.size,ControllerVar.size))
 
     loadladder = pygame.image.load('Assets\Misc\Ladder.png').convert()
     loadladder.set_colorkey((0,0,0))
-    ladder = pygame.transform.scale(loadladder, (size,size))
+    ladder = pygame.transform.scale(loadladder, (ControllerVar.size,ControllerVar.size))
 
     # Points 
     loadpt1 = pygame.image.load('Assets\Misc\plus_one.png').convert()
     loadpt1.set_colorkey((0,0,0))
-    pt1 = pygame.transform.scale(loadpt1, (size,size))
+    pt1 = pygame.transform.scale(loadpt1, (ControllerVar.size,ControllerVar.size))
 
     loadpt2 = pygame.image.load('Assets\Misc\plus_two.png').convert()
     loadpt2.set_colorkey((0,0,0))
-    pt2 = pygame.transform.scale(loadpt2, (size,size))
+    pt2 = pygame.transform.scale(loadpt2, (ControllerVar.size,ControllerVar.size))
 
     loadpt5 = pygame.image.load('Assets\Misc\plus_five.png').convert()
     loadpt5.set_colorkey((0,0,0))
-    pt5 = pygame.transform.scale(loadpt5, (size,size))
+    pt5 = pygame.transform.scale(loadpt5, (ControllerVar.size,ControllerVar.size))
 
     loadpt10 = pygame.image.load('Assets\Misc\plus_ten.png').convert()
     loadpt10.set_colorkey((0,0,0))
-    pt10 = pygame.transform.scale(loadpt10, (size,size))
+    pt10 = pygame.transform.scale(loadpt10, (ControllerVar.size,ControllerVar.size))
 
     # UI
     loadtxt = pygame.image.load('Assets\Misc\TXT_BOX.png').convert()
-    txt = pygame.transform.scale(loadtxt, (480*2,120*2))
+    txt = pygame.transform.scale(loadtxt, (ControllerVar.WINDOW_SIZE[0]/1.5,ControllerVar.WINDOW_SIZE[1]/3))
 
     loadtable = pygame.image.load('Assets\Misc\Table.png').convert()
-    table = pygame.transform.scale(loadtable, WINDOW_SIZE)
+    table = pygame.transform.scale(loadtable, ControllerVar.WINDOW_SIZE)
+
+    loadbar = pygame.image.load('Assets\Misc\Bar.png').convert()
+    loadbar.set_colorkey((0,0,0))
+    bar = pygame.transform.scale(loadbar, (ControllerVar.WINDOW_SIZE[0]/5,ControllerVar.WINDOW_SIZE[1]/10))
+
+    loadgameover = pygame.image.load('Assets\Misc\Game Over.png').convert()
+    gameover = pygame.transform.scale(loadgameover, ControllerVar.WINDOW_SIZE)
+
+    loadvignette = pygame.image.load('Assets\Misc\Vignette.png').convert()
+    loadvignette.set_colorkey((0,0,0))
+    loadvignette.set_alpha(100)
+    vignette = pygame.transform.scale(loadvignette, ControllerVar.WINDOW_SIZE)
+
+    loadvignette2 = pygame.image.load('Assets\Misc\Vignette2.png').convert()
+    loadvignette2.set_colorkey((0,0,0))
+    loadvignette.set_alpha(200)
+    vignette2 = pygame.transform.scale(loadvignette2, ControllerVar.WINDOW_SIZE)
 
     # Player
     loadplayer = pygame.image.load('Assets\Chess Pieces\Pawn.png').convert()
     loadplayer.set_colorkey((0,0,0))
-    player = pygame.transform.scale(loadplayer, (size, size))
+    player = pygame.transform.scale(loadplayer, (ControllerVar.size, ControllerVar.size))
+
+    loadhurt = pygame.image.load('Assets\Chess Pieces\PlayerHurt.png').convert()
+    loadhurt.set_colorkey((0,0,0))
+    hurt = pygame.transform.scale(loadhurt, (ControllerVar.size, ControllerVar.size))
 
     # Enemies
     loadbullet = pygame.image.load('Assets\Chess Pieces\Bullet.png').convert()
     loadbullet.set_colorkey((0,0,0))
-    bullet = pygame.transform.scale(loadbullet, (size/3,size/3))
+    bullet = pygame.transform.scale(loadbullet, (ControllerVar.size/3,ControllerVar.size/3))
 
     loadpawn = pygame.image.load('Assets\Chess Pieces\Enemy Pawn.png').convert()
     loadpawn.set_colorkey((0,0,0))
-    pawn = pygame.transform.scale(loadpawn, (size,size))
+    pawn = pygame.transform.scale(loadpawn, (ControllerVar.size,ControllerVar.size))
 
     loadbishop = pygame.image.load('Assets\Chess Pieces\Enemy Bishop.png').convert()
     loadbishop.set_colorkey((0,0,0))
-    bishop = pygame.transform.scale(loadbishop, (size,size))
+    bishop = pygame.transform.scale(loadbishop, (ControllerVar.size,ControllerVar.size))
 
     loadguard = pygame.image.load('Assets\Chess Pieces\Enemy Guard.png').convert()
     loadguard.set_colorkey((0,0,0))
-    guard = pygame.transform.scale(loadguard, (size,size))
+    guard = pygame.transform.scale(loadguard, (ControllerVar.size,ControllerVar.size))
 
     loadking = pygame.image.load('Assets\Chess Pieces\Enemy King.png').convert()
     loadking.set_colorkey((0,0,0))
-    king = pygame.transform.scale(loadking, (size,size))
+    king = pygame.transform.scale(loadking, (ControllerVar.size,ControllerVar.size))
 
     loadknight = pygame.image.load('Assets\Chess Pieces\Enemy Knight.png').convert()
     loadknight.set_colorkey((0,0,0))
-    knight = pygame.transform.scale(loadknight, (size,size))
+    knight = pygame.transform.scale(loadknight, (ControllerVar.size,ControllerVar.size))
 
     loadqueen = pygame.image.load('Assets\Chess Pieces\Enemy Queen.png').convert()
     loadqueen.set_colorkey((0,0,0))
-    queen = pygame.transform.scale(loadqueen, (size,size))
+    queen = pygame.transform.scale(loadqueen, (ControllerVar.size,ControllerVar.size))
 
     loadrook = pygame.image.load('Assets\Chess Pieces\Enemy Rook.png').convert()
     loadrook.set_colorkey((0,0,0))
-    rook = pygame.transform.scale(loadrook, (size,size))
+    rook = pygame.transform.scale(loadrook, (ControllerVar.size,ControllerVar.size))
 
+    # Tiles
+    loaddarkgrass = pygame.image.load('Assets\Tiles\Dark Grass.png').convert()
+    loaddarkgrass.set_colorkey((0,0,0))
+    grassD = pygame.transform.scale(loaddarkgrass, (ControllerVar.size,ControllerVar.size))
+    loadlightgrass = pygame.image.load('Assets\Tiles\Light Grass.png').convert()
+    loadlightgrass.set_colorkey((0,0,0))
+    grassL = pygame.transform.scale(loadlightgrass, (ControllerVar.size,ControllerVar.size))
+
+    loadblack = pygame.image.load('Assets\Tiles\Black.png').convert()
+    loadblack.set_colorkey((0,0,0))
+    black = pygame.transform.scale(loadblack, (ControllerVar.size,ControllerVar.size))
+    loadwhite = pygame.image.load('Assets\Tiles\White.png').convert()
+    loadwhite.set_colorkey((0,0,0))
+    white = pygame.transform.scale(loadwhite, (ControllerVar.size,ControllerVar.size))
+
+    loaddarkstone = pygame.image.load('Assets\Tiles\Dark Stone.png').convert()
+    loaddarkstone.set_colorkey((0,0,0))
+    stoneD = pygame.transform.scale(loaddarkstone, (ControllerVar.size,ControllerVar.size))
+    loadlightstone = pygame.image.load('Assets\Tiles\Light Stone.png').convert()
+    loadlightstone.set_colorkey((0,0,0))
+    stoneL = pygame.transform.scale(loadlightstone, (ControllerVar.size,ControllerVar.size))
+
+
+    tiles = [white, black]
