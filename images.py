@@ -25,6 +25,14 @@ class Images:
     loadladder.set_colorkey((0,0,0))
     ladder = pygame.transform.scale(loadladder, (ControllerVar.size,ControllerVar.size))
 
+    loadsinkhole = pygame.image.load('Assets\Tiles\SinkHole.png').convert()
+    loadsinkhole.set_colorkey((0,0,0))
+    sinkhole = pygame.transform.scale(loadsinkhole, (ControllerVar.size,ControllerVar.size))
+
+    loadcultist = pygame.image.load('Assets\Chess Pieces\Cultist.png').convert()
+    loadcultist.set_colorkey((0,0,0))
+    cultist = pygame.transform.scale(loadcultist, (ControllerVar.size,ControllerVar.size))
+
     # Points 
     loadpt1 = pygame.image.load('Assets\Misc\plus_one.png').convert()
     loadpt1.set_colorkey((0,0,0))
@@ -74,6 +82,14 @@ class Images:
     loadhurt = pygame.image.load('Assets\Chess Pieces\PlayerHurt.png').convert()
     loadhurt.set_colorkey((0,0,0))
     hurt = pygame.transform.scale(loadhurt, (ControllerVar.size, ControllerVar.size))
+
+    loadwading = pygame.image.load('Assets\Chess Pieces\PlayerInLiquid.png').convert()
+    loadwading.set_colorkey((0,0,0))
+    wading = pygame.transform.scale(loadwading, (ControllerVar.size, ControllerVar.size))
+
+    loadwadinghurt = pygame.image.load('Assets\Chess Pieces\PlayerInLiquidHurt.png').convert()
+    loadwadinghurt.set_colorkey((0,0,0))
+    wadinghurt = pygame.transform.scale(loadwadinghurt, (ControllerVar.size, ControllerVar.size))
 
     # Enemies
     loadbullet = pygame.image.load('Assets\Chess Pieces\Bullet.png').convert()
@@ -130,5 +146,34 @@ class Images:
     loadlightstone.set_colorkey((0,0,0))
     stoneL = pygame.transform.scale(loadlightstone, (ControllerVar.size,ControllerVar.size))
 
+    loaddarkdirt = pygame.image.load('Assets\Tiles\Dark Dirt.png').convert()
+    loaddarkdirt.set_colorkey((0,0,0))
+    dirtD = pygame.transform.scale(loaddarkdirt, (ControllerVar.size,ControllerVar.size))
+    loadlightdirt = pygame.image.load('Assets\Tiles\Light Dirt.png').convert()
+    loadlightdirt.set_colorkey((0,0,0))
+    dirtL = pygame.transform.scale(loadlightdirt, (ControllerVar.size,ControllerVar.size))
+
+
+    waterD = pygame.image.load('Assets\Tiles\waterdark1.png').convert()
+
+    waterL = pygame.image.load('Assets\Tiles\waterdark1.png').convert()
+
+
+    def animateWater(waterL,waterD):
+        if ControllerVar.tickrule % 2 == 0: #and ControllerVar.sametickrule == False:
+            loaddarkwater = pygame.image.load('Assets\Tiles\waterdark1.png').convert()
+            loaddarkwater.set_colorkey((0,0,0))
+            waterD = pygame.transform.scale(loaddarkwater, (ControllerVar.size,ControllerVar.size))
+            loadlightwater = pygame.image.load('Assets\Tiles\waterlight1.png').convert()
+            loadlightwater.set_colorkey((0,0,0))
+            waterL = pygame.transform.scale(loadlightwater, (ControllerVar.size,ControllerVar.size))
+        elif ControllerVar.tickrule % 2 == 1: #and ControllerVar.sametickrule == False:
+            loaddarkwater = pygame.image.load('Assets\Tiles\waterdark2.png').convert()
+            loaddarkwater.set_colorkey((0,0,0))
+            waterD = pygame.transform.scale(loaddarkwater, (ControllerVar.size,ControllerVar.size))
+            loadlightwater = pygame.image.load('Assets\Tiles\waterlight2.png').convert()
+            loadlightwater.set_colorkey((0,0,0))
+            waterL = pygame.transform.scale(loadlightwater, (ControllerVar.size,ControllerVar.size))
+        return waterL,waterD
 
     tiles = [white, black]

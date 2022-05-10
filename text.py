@@ -36,5 +36,10 @@ class Text:
         "It is very cool",
         "19 dollar fortnite giftcard",
         "Who wants it?",
-        "And yes, I am giving it away"
+        "And yes, I am giving it away",
+        "Hmph. No one showed up to my party,",
+        "I invited all of the cultists!",
+        "... do they hate me?..",
+        "Welp, even if they do,",
+        "Im sure my deity will still take my sacrifice!"
         ]

@@ -2,6 +2,8 @@
 # Chess Attak #
 ################
 
+from tabnanny import check
+from tkinter import Image
 import pygame, sys, random, math, json, pickle, time
 from images import Images
 from variables import *
@@ -19,40 +21,6 @@ pygame.display.set_caption("Chess Attak")
 # Pygame Variables
 boardRect = pygame.Rect(0 + ControllerVar.size+ControllerVar.WINDOW_SIZE[0]/4.5, ControllerVar.size/1.1,ControllerVar.size*7,ControllerVar.size*7)
 
-# worldMap = [
-#     [
-#         [-2, "Default"],
-#         [-1, PlayerVar.defaultposition[0]],
-#         [0, [1,0],Images.chest,0], 
-#         [1, [2,0],Images.refugee,1,[0,1,2,3,4],Voices.refugee],
-#         [1, [2,1],Images.refugee,2,[0,1,5,6],Voices.refugee],
-#         [1, [2,2],Images.refugee,3,[10,11,12],Voices.deepvoiceText],
-#         [1, [2,3],Images.refugee,4,[8,9],Voices.deepvoiceText],
-#         [4, [5,0],Images.stairs]
-#     ],
-#     [
-#         [-2, "Outside"],
-#         [-1, PlayerVar.defaultposition[1]],
-#         [2, [4,0],Images.pawn,1,"Pawn"],
-#         [2, [4,5],Images.rook,2,"Rook"],
-#         #[2, [4,6],Images.bishop,3,"Bishop"],
-#         #[2, [4,7],Images.queen,4,"Queen"],
-#         #[2, [4,3],Images.king,5,"King"],
-#         #[2, [4,2],Images.knight,6,"Knight"],
-#         [5, [5,1],Images.ladder],
-#         [4, [0,0],Images.stairs]
-#     ],
-#     [
-#         [-2, "Cultist"],
-#         [-1, PlayerVar.defaultposition[2]],
-#         [5, [4,4],Images.ladder]
-#     ]
-# ] # object(object type, object pos(object x, object y), image, count, nbt) # [0,[1,0],chest,0,1]
-
-# for x in range(8):
-#     for y in range(8):
-#         if x != 4 and y != 4:
-#             worldMap[2].append([0, [x,y],Images.chest])
 def initWorld():
     ChessVar.worldMap = [
         [
@@ -70,6 +38,20 @@ def initWorld():
             [-1, PlayerVar.defaultposition[1]],
             [2, [4,0],Images.pawn,1,"Pawn"],
             [2, [4,5],Images.rook,2,"Rook"],
+            # [3, [4,0],Images.wall],
+            # [3, [4,1],Images.wall],
+            # [3, [4,2],Images.wall],
+            # [3, [4,3],Images.wall],
+            # [3, [4,4],Images.wall],
+            # [3, [4,6],Images.wall],
+            # [3, [4,7],Images.wall],
+            # [3, [0,5],Images.wall],
+            # [3, [1,5],Images.wall],
+            # [3, [2,5],Images.wall],
+            # [3, [3,5],Images.wall],
+            # [3, [5,5],Images.wall],
+            # [3, [6,5],Images.wall],
+            # [3, [7,5],Images.wall],
             #[2, [4,6],Images.bishop,3,"Bishop"],
             #[2, [4,7],Images.queen,4,"Queen"],
             #[2, [4,3],Images.king,5,"King"],
@@ -80,7 +62,22 @@ def initWorld():
         [
             [-2, "Cultist"],
             [-1, PlayerVar.defaultposition[2]],
-            [5, [4,4],Images.ladder]
+            [5, [4,4],Images.ladder],
+            [4, [5,4],Images.stairs],
+            [1, [4,5],Images.cultist,0,[13,14,15,16,17],Voices.deepvoiceText]
+        ],
+        [
+            [-2, "Cave"],
+            [-1, PlayerVar.defaultposition[3]],
+            [5, [7,6],Images.ladder],
+            [4, [0,0],Images.stairs]
+        ],
+        [
+            [-2, "Swamp"],
+            [-1, [0,0]],
+            [2, [4,0],Images.pawn,1,"Pawn"],
+            [2, [4,5],Images.rook,2,"Rook"],
+            [5, [0,1],Images.ladder]
         ]
     ]
     for x in range(8):
@@ -94,11 +91,16 @@ def initWorld():
     ChessVar.objectlist = ChessVar.worldMap[ControllerVar.currentMap] 
     ControllerVar.bulletlist = []
     PlayerVar.isHurt = False
+    Text.globalnum = 0
+    Text.globalstring = ""
+    Text.txtopen = False
+    Text.nbtNum = 0
+    Text.nbt = []
+
 
 initWorld()
 # Game Loop
 while True:
-    
     ChessVar.objectlist = ChessVar.worldMap[ControllerVar.currentMap] 
 
     start = time.time()
@@ -128,9 +130,11 @@ while True:
             if event.key == K_e:
                 ControllerVar.hitboxes = not ControllerVar.hitboxes
             if event.key == K_r:
-                ControllerVar.gameover = False
-                initWorld()
-                continue
+                if ControllerVar.gameover == True:
+                    ControllerVar.gameover = False
+                    initWorld()
+                else:
+                    ControllerVar.gameover = True
                 
         if event.type == MOUSEBUTTONDOWN:
             if event.button == 1:
@@ -176,9 +180,9 @@ while True:
 
         for tile in ChessVar.chesstiles:
             rect = tile[3]
-            if rect.collidepoint((mx,my)):
-                pygame.draw.rect(ControllerVar.screen,(255,0,0),rect)
-            elif tile[5] == 0:
+            # if rect.collidepoint((mx,my)):
+            #     pygame.draw.rect(ControllerVar.screen,(255,0,0),rect)
+            if tile[5] == 0:
                 ControllerVar.screen.blit(Images.tiles[1], rect)
             else:
                 ControllerVar.screen.blit(Images.tiles[0], rect)
@@ -203,8 +207,8 @@ while True:
             
             match obj[0]:
                 case -1: # Player
-                    PlayerVar.playerposition = PlayerVar.defaultposition[ControllerVar.currentMap]
-                    PlayerVar.defaultposition[ControllerVar.currentMap] = PlayerVar.playerposition
+                    PlayerVar.playerposition = obj[1]
+                    obj[1] = PlayerVar.playerposition
                 case -2: # Biome
                     PlayerVar.biome = obj[1]
             if PlayerVar.playerposition[0] == obj[1][0] and PlayerVar.playerposition[1] == obj[1][1]:
@@ -236,12 +240,12 @@ while True:
                         PlayerVar.playerposition[0], PlayerVar.playerposition[1] = PlayerVar.prevspot
                         ControllerVar.currentMap += 1
                         ControllerVar.bulletlist = []
-                    case 5: # Stairs
+                    case 5: # Ladder
                         PlayerVar.playerposition[0], PlayerVar.playerposition[1] = PlayerVar.prevspot
                         ControllerVar.currentMap -= 1
                         ControllerVar.bulletlist = []
                         
-        
+
         
         if ControllerVar.tickrule % 6 == 0 and ControllerVar.sametickrule == False:
             for obj in ChessVar.objectlist:
@@ -262,10 +266,16 @@ while True:
                             possiblespots.append([obj[1][0], i])
                         for b in range(8):
                             possiblespots.append([b, obj[1][1]])
-                        possiblespots.remove(obj[1])
-                        print(obj[1])
-                        print(possiblespots)
-                        obj[1] = possiblespots[random.randrange(len(possiblespots))]
+                        
+                        checkspot = possiblespots[random.randrange(len(possiblespots))]
+                        for obj1 in ChessVar.objectlist:
+                            if checkspot == obj1[1] or obj[1] == checkspot or checkspot == PlayerVar.playerposition:
+                                print("ommited " + str(checkspot))
+                                
+                                possiblespots.remove(checkspot)
+                                print(possiblespots)
+                                checkspot = possiblespots[random.randrange(len(possiblespots))]
+                        obj[1] = checkspot
 
         if ControllerVar.tickrule % 2 == 0 and ControllerVar.sametickrule == False:
             for obj in ChessVar.objectlist:
@@ -276,14 +286,25 @@ while True:
             PlayerVar.isHurt = False
 
         # Handle Player
-        PlayerVar.playerrect.x = ((PlayerVar.playerposition[0]*ControllerVar.size)+(ControllerVar.WINDOW_SIZE[0]/4))+(ControllerVar.size/3)
-        PlayerVar.playerrect.y = ((PlayerVar.playerposition[1]*ControllerVar.size+40))+(ControllerVar.size/3)
-        if PlayerVar.isHurt:
-            ControllerVar.screen.blit(Images.hurt,((PlayerVar.playerposition[0]*ControllerVar.size)+(ControllerVar.WINDOW_SIZE[0]/4),PlayerVar.playerposition[1]*ControllerVar.size+40-20))
+        
+        if not PlayerVar.wading:
+            PlayerVar.playerrect.x = ((PlayerVar.playerposition[0]*ControllerVar.size)+(ControllerVar.WINDOW_SIZE[0]/4))+(ControllerVar.size/3)
+            PlayerVar.playerrect.y = ((PlayerVar.playerposition[1]*ControllerVar.size+40))+(ControllerVar.size/3)
+            if PlayerVar.isHurt:
+                ControllerVar.screen.blit(Images.hurt,((PlayerVar.playerposition[0]*ControllerVar.size)+(ControllerVar.WINDOW_SIZE[0]/4),PlayerVar.playerposition[1]*ControllerVar.size+40-20))
+            else:
+                ControllerVar.screen.blit(Images.player,((PlayerVar.playerposition[0]*ControllerVar.size)+(ControllerVar.WINDOW_SIZE[0]/4),PlayerVar.playerposition[1]*ControllerVar.size+20))
+            if ControllerVar.hitboxes:
+                pygame.draw.rect(ControllerVar.screen,(0,255,0),PlayerVar.playerrect,1)
         else:
-            ControllerVar.screen.blit(Images.player,((PlayerVar.playerposition[0]*ControllerVar.size)+(ControllerVar.WINDOW_SIZE[0]/4),PlayerVar.playerposition[1]*ControllerVar.size+20))
-        if ControllerVar.hitboxes:
-            pygame.draw.rect(ControllerVar.screen,(0,255,0),PlayerVar.playerrect,1)
+            PlayerVar.playerrect.x = ((PlayerVar.playerposition[0]*ControllerVar.size)+(ControllerVar.WINDOW_SIZE[0]/4))+(ControllerVar.size/3)
+            PlayerVar.playerrect.y = ((PlayerVar.playerposition[1]*ControllerVar.size+40))+(ControllerVar.size/1.5)
+            if PlayerVar.isHurt:
+                ControllerVar.screen.blit(Images.wadinghurt,((PlayerVar.playerposition[0]*ControllerVar.size)+(ControllerVar.WINDOW_SIZE[0]/4),PlayerVar.playerposition[1]*ControllerVar.size+40-20))
+            else:
+                ControllerVar.screen.blit(Images.wading,((PlayerVar.playerposition[0]*ControllerVar.size)+(ControllerVar.WINDOW_SIZE[0]/4),PlayerVar.playerposition[1]*ControllerVar.size+20))
+            if ControllerVar.hitboxes:
+                pygame.draw.rect(ControllerVar.screen,(0,255,0),PlayerVar.playerrect,1)
 
         # Handle Objects
         Chest.handleChest()
@@ -411,12 +432,22 @@ while True:
         match PlayerVar.biome:
             case "Default":
                 Images.tiles = [Images.white, Images.black]
+                PlayerVar.wading = False
             case "Outside":
                 Images.tiles = [Images.grassL, Images.grassD]
+                PlayerVar.wading = False
             case "Cultist":
                 Images.tiles = [Images.stoneL, Images.stoneD]
                 ControllerVar.screen.blit(Images.vignette, (0,0))
                 ControllerVar.screen.blit(Images.vignette2, (0,0))
+                PlayerVar.wading = False
+            case "Cave":
+                Images.tiles = [Images.dirtL, Images.dirtD]
+                PlayerVar.wading = False
+            case "Swamp":
+                Images.tiles = [Images.animateWater(Images.waterL,Images.waterD)[0], Images.animateWater(Images.waterL,Images.waterD)[1]]
+                PlayerVar.wading = True
+
         
         text = Text.font.render(str(PlayerVar.points), False, (255,255,255))
         

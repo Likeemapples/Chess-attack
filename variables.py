@@ -24,12 +24,13 @@ class ChessVar:
 
 class PlayerVar:
     playerposition = [0,0] # board x, board y, area(area x, area y)
-    defaultposition = [[0,0],[5,0],[4,3]]
+    defaultposition = [[0,0],[5,0],[4,3],[7,7]]
     prevspot = []
     playerrect = pygame.Rect(0,0,ControllerVar.size/3,ControllerVar.size/3)
     points = 15
     isHurt = False
     biome = "Default"
+    wading = False
 
 class TimerVar:
     tick_init = time.time()
