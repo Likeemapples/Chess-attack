@@ -41,5 +41,5 @@ class Text:
         "I invited all of the cultists!",
         "... do they hate me?..",
         "Welp, even if they do,",
-        "Im sure my deity will still take my sacrifice!"
+        "I can just sacrifice them as well!"
         ]

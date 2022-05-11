@@ -2,6 +2,8 @@
 # Chess Attak #
 ################
 
+from email.mime import image
+from msilib.schema import Control
 from tabnanny import check
 from tkinter import Image
 import pygame, sys, random, math, json, pickle, time
@@ -21,23 +23,69 @@ pygame.display.set_caption("Chess Attak")
 # Pygame Variables
 boardRect = pygame.Rect(0 + ControllerVar.size+ControllerVar.WINDOW_SIZE[0]/4.5, ControllerVar.size/1.1,ControllerVar.size*7,ControllerVar.size*7)
 
+def enemyShoot(firedBy, obj):
+    match firedBy:
+        case "Pawn": 
+            ControllerVar.bulletlist.append([obj[1],pygame.Rect(obj[1][0],obj[1][1],ControllerVar.size,ControllerVar.size),[0,0],0,1, obj[5]])
+            ControllerVar.bulletlist.append([obj[1],pygame.Rect(obj[1][0],obj[1][1],ControllerVar.size,ControllerVar.size),[0,0],1,1, obj[5]])
+            ControllerVar.bulletlist.append([obj[1],pygame.Rect(obj[1][0],obj[1][1],ControllerVar.size,ControllerVar.size),[0,0],7,1, obj[5]])
+        case "Rook":
+            ControllerVar.bulletlist.append([obj[1],pygame.Rect(obj[1][0],obj[1][1],ControllerVar.size,ControllerVar.size),[0,0],0,10, obj[5]])
+            ControllerVar.bulletlist.append([obj[1],pygame.Rect(obj[1][0],obj[1][1],ControllerVar.size,ControllerVar.size),[0,0],2,10, obj[5]])
+            ControllerVar.bulletlist.append([obj[1],pygame.Rect(obj[1][0],obj[1][1],ControllerVar.size,ControllerVar.size),[0,0],4,10, obj[5]])
+            ControllerVar.bulletlist.append([obj[1],pygame.Rect(obj[1][0],obj[1][1],ControllerVar.size,ControllerVar.size),[0,0],6,10, obj[5]])
+        case "Bishop":
+            ControllerVar.bulletlist.append([obj[1],pygame.Rect(obj[1][0],obj[1][1],ControllerVar.size,ControllerVar.size),[0,0],1,10, obj[5]])
+            ControllerVar.bulletlist.append([obj[1],pygame.Rect(obj[1][0],obj[1][1],ControllerVar.size,ControllerVar.size),[0,0],3,10, obj[5]])
+            ControllerVar.bulletlist.append([obj[1],pygame.Rect(obj[1][0],obj[1][1],ControllerVar.size,ControllerVar.size),[0,0],5,10, obj[5]])
+            ControllerVar.bulletlist.append([obj[1],pygame.Rect(obj[1][0],obj[1][1],ControllerVar.size,ControllerVar.size),[0,0],7,10, obj[5]])
+        case "Queen":
+            ControllerVar.bulletlist.append([obj[1],pygame.Rect(obj[1][0],obj[1][1],ControllerVar.size,ControllerVar.size),[0,0],0,10, obj[5]])
+            ControllerVar.bulletlist.append([obj[1],pygame.Rect(obj[1][0],obj[1][1],ControllerVar.size,ControllerVar.size),[0,0],1,10, obj[5]])
+            ControllerVar.bulletlist.append([obj[1],pygame.Rect(obj[1][0],obj[1][1],ControllerVar.size,ControllerVar.size),[0,0],2,10, obj[5]])
+            ControllerVar.bulletlist.append([obj[1],pygame.Rect(obj[1][0],obj[1][1],ControllerVar.size,ControllerVar.size),[0,0],3,10, obj[5]])
+            ControllerVar.bulletlist.append([obj[1],pygame.Rect(obj[1][0],obj[1][1],ControllerVar.size,ControllerVar.size),[0,0],4,10, obj[5]])
+            ControllerVar.bulletlist.append([obj[1],pygame.Rect(obj[1][0],obj[1][1],ControllerVar.size,ControllerVar.size),[0,0],5,10, obj[5]])
+            ControllerVar.bulletlist.append([obj[1],pygame.Rect(obj[1][0],obj[1][1],ControllerVar.size,ControllerVar.size),[0,0],6,10, obj[5]])
+            ControllerVar.bulletlist.append([obj[1],pygame.Rect(obj[1][0],obj[1][1],ControllerVar.size,ControllerVar.size),[0,0],7,10, obj[5]])
+        case "King":
+            ControllerVar.bulletlist.append([obj[1],pygame.Rect(obj[1][0],obj[1][1],ControllerVar.size,ControllerVar.size),[0,0],0,1, obj[5]])
+            ControllerVar.bulletlist.append([obj[1],pygame.Rect(obj[1][0],obj[1][1],ControllerVar.size,ControllerVar.size),[0,0],1,1, obj[5]])
+            ControllerVar.bulletlist.append([obj[1],pygame.Rect(obj[1][0],obj[1][1],ControllerVar.size,ControllerVar.size),[0,0],2,1, obj[5]])
+            ControllerVar.bulletlist.append([obj[1],pygame.Rect(obj[1][0],obj[1][1],ControllerVar.size,ControllerVar.size),[0,0],3,1, obj[5]])
+            ControllerVar.bulletlist.append([obj[1],pygame.Rect(obj[1][0],obj[1][1],ControllerVar.size,ControllerVar.size),[0,0],4,1, obj[5]])
+            ControllerVar.bulletlist.append([obj[1],pygame.Rect(obj[1][0],obj[1][1],ControllerVar.size,ControllerVar.size),[0,0],5,1, obj[5]])
+            ControllerVar.bulletlist.append([obj[1],pygame.Rect(obj[1][0],obj[1][1],ControllerVar.size,ControllerVar.size),[0,0],6,1, obj[5]])
+            ControllerVar.bulletlist.append([obj[1],pygame.Rect(obj[1][0],obj[1][1],ControllerVar.size,ControllerVar.size),[0,0],7,1, obj[5]])
+        case "Knight":
+            ControllerVar.bulletlist.append([obj[1],pygame.Rect(obj[1][0],obj[1][1],ControllerVar.size,ControllerVar.size),[0,0],8,2, obj[5]])
+            ControllerVar.bulletlist.append([obj[1],pygame.Rect(obj[1][0],obj[1][1],ControllerVar.size,ControllerVar.size),[0,0],9,2, obj[5]])
+            ControllerVar.bulletlist.append([obj[1],pygame.Rect(obj[1][0],obj[1][1],ControllerVar.size,ControllerVar.size),[0,0],10,2, obj[5]])
+            ControllerVar.bulletlist.append([obj[1],pygame.Rect(obj[1][0],obj[1][1],ControllerVar.size,ControllerVar.size),[0,0],11,2, obj[5]])
+            ControllerVar.bulletlist.append([obj[1],pygame.Rect(obj[1][0],obj[1][1],ControllerVar.size,ControllerVar.size),[0,0],12,2, obj[5]])
+            ControllerVar.bulletlist.append([obj[1],pygame.Rect(obj[1][0],obj[1][1],ControllerVar.size,ControllerVar.size),[0,0],13,2, obj[5]])
+            ControllerVar.bulletlist.append([obj[1],pygame.Rect(obj[1][0],obj[1][1],ControllerVar.size,ControllerVar.size),[0,0],14,2, obj[5]])
+            ControllerVar.bulletlist.append([obj[1],pygame.Rect(obj[1][0],obj[1][1],ControllerVar.size,ControllerVar.size),[0,0],15,2, obj[5]])
+
+
 def initWorld():
     ChessVar.worldMap = [
         [
             [-2, "Default"],
-            [-1, PlayerVar.defaultposition[0]],
+            [-1, [0,0]],
             [0, [1,0],Images.chest,0], 
             [1, [2,0],Images.refugee,1,[0,1,2,3,4],Voices.refugee],
             [1, [2,1],Images.refugee,2,[0,1,5,6],Voices.refugee],
             [1, [2,2],Images.refugee,3,[10,11,12],Voices.deepvoiceText],
             [1, [2,3],Images.refugee,4,[8,9],Voices.deepvoiceText],
+            
             [4, [5,0],Images.stairs]
         ],
         [
             [-2, "Outside"],
-            [-1, PlayerVar.defaultposition[1]],
-            [2, [4,0],Images.pawn,1,"Pawn"],
-            [2, [4,5],Images.rook,2,"Rook"],
+            [-1, [5,0]],
+            [2, [4,0],Images.pawn,1,"Pawn",False],
+            [2, [4,5],Images.rook,2,"Rook",False],
             # [3, [4,0],Images.wall],
             # [3, [4,1],Images.wall],
             # [3, [4,2],Images.wall],
@@ -61,22 +109,27 @@ def initWorld():
         ],
         [
             [-2, "Cultist"],
-            [-1, PlayerVar.defaultposition[2]],
+            [-1, [4,3]],
             [5, [4,4],Images.ladder],
             [4, [5,4],Images.stairs],
             [1, [4,5],Images.cultist,0,[13,14,15,16,17],Voices.deepvoiceText]
         ],
         [
             [-2, "Cave"],
-            [-1, PlayerVar.defaultposition[3]],
+            [-1, [7,7]],
             [5, [7,6],Images.ladder],
             [4, [0,0],Images.stairs]
         ],
         [
             [-2, "Swamp"],
             [-1, [0,0]],
-            [2, [4,0],Images.pawn,1,"Pawn"],
-            [2, [4,5],Images.rook,2,"Rook"],
+            # [2, [4,0],Images.pawn,1,"Pawn",False],
+            # [2, [4,5],Images.rook,2,"Rook",False],
+            [6, [4,4],['Assets\Tiles\waterlight1.png','Assets\Tiles\waterlight2.png']],
+            [6, [4,5],['Assets\Tiles\waterdark1.png','Assets\Tiles\waterdark2.png']],
+            [6, [4,3],['Assets\Tiles\waterdark1.png','Assets\Tiles\waterdark2.png']],
+            [6, [3,4],['Assets\Tiles\waterdark1.png','Assets\Tiles\waterdark2.png']],
+            [6, [5,4],['Assets\Tiles\waterdark1.png','Assets\Tiles\waterdark2.png']],
             [5, [0,1],Images.ladder]
         ]
     ]
@@ -84,8 +137,9 @@ def initWorld():
         for y in range(8):
             if x != 4 and y != 4:
                 ChessVar.worldMap[2].append([0, [x,y],Images.chest])
-    PlayerVar.defaultposition = [[0,0],[5,0],[4,3]]
-    PlayerVar.points = 15
+    #         ChessVar.worldMap[0].append([6, [x,y],['Assets\Tiles\waterlight1.png','Assets\Tiles\waterlight2.png']])
+    # ChessVar.worldMap[0].append([2, [7,7],Images.rook,2,"Rook",False])
+    PlayerVar.points = 1
     PlayerVar.playerposition = [0,0]
     ControllerVar.currentMap = 0
     ChessVar.objectlist = ChessVar.worldMap[ControllerVar.currentMap] 
@@ -101,11 +155,11 @@ def initWorld():
 initWorld()
 # Game Loop
 while True:
-    ChessVar.objectlist = ChessVar.worldMap[ControllerVar.currentMap] 
+    ChessVar.objectlist = ChessVar.worldMap[ControllerVar.currentMap]
 
     start = time.time()
     # Events
-    
+
     for event in pygame.event.get():
         if event.type == QUIT:
             pygame.quit()
@@ -197,6 +251,13 @@ while True:
                 ControllerVar.screen.blit(obj[2],temp_rect)
                 if ControllerVar.hitboxes:
                     pygame.draw.rect(ControllerVar.screen,(0,0,255),temp_rect,1)
+
+            # Draw Animated
+            elif obj[0] == 6:
+                ControllerVar.screen.blit(Images.animate(obj[2][0],obj[2][1]),temp_rect)
+                if ControllerVar.hitboxes:
+                    pygame.draw.rect(ControllerVar.screen,(0,0,255),temp_rect,1)
+
             
             # Draw Offset
             elif obj[0] != -1 and obj[0] != -2:
@@ -211,7 +272,9 @@ while True:
                     obj[1] = PlayerVar.playerposition
                 case -2: # Biome
                     PlayerVar.biome = obj[1]
-            if PlayerVar.playerposition[0] == obj[1][0] and PlayerVar.playerposition[1] == obj[1][1]:
+            if PlayerVar.playerposition == obj[1]:
+                if not obj[0] == 6:
+                    PlayerVar.wading = False
                 match obj[0]:
                     case 0: # Chest
                         ControllerVar.chestloot = random.randrange(0,100)
@@ -244,8 +307,10 @@ while True:
                         PlayerVar.playerposition[0], PlayerVar.playerposition[1] = PlayerVar.prevspot
                         ControllerVar.currentMap -= 1
                         ControllerVar.bulletlist = []
-                        
-
+                    case 6: # Water
+                        PlayerVar.wading = True
+                    
+                
         
         if ControllerVar.tickrule % 6 == 0 and ControllerVar.sametickrule == False:
             for obj in ChessVar.objectlist:
@@ -276,12 +341,23 @@ while True:
                                 print(possiblespots)
                                 checkspot = possiblespots[random.randrange(len(possiblespots))]
                         obj[1] = checkspot
+                    
 
         if ControllerVar.tickrule % 2 == 0 and ControllerVar.sametickrule == False:
             for obj in ChessVar.objectlist:
                 if obj[0] == 2:
                     enemyShoot(obj[4],obj)
                     TimerVar.shoot_init = time.time()
+                    for obj1 in ChessVar.objectlist:
+                        if obj[1] == obj1[1]:
+                            match obj[4]:
+                                case "Rook":
+                                    if obj1[0] == 6:
+                                        obj[2] = Images.rookswim
+                                        obj[5] = True
+                                    else:
+                                        obj[2] = Images.rook
+                                        obj[5] = False
         if ControllerVar.sametickrule == False:
             PlayerVar.isHurt = False
 
@@ -312,50 +388,7 @@ while True:
         Refugee.handleRefugee()
         
         # Enemy
-        def enemyShoot(firedBy, obj):
-            match firedBy:
-                case "Pawn": 
-                    ControllerVar.bulletlist.append([obj[1],pygame.Rect(obj[1][0],obj[1][1],ControllerVar.size,ControllerVar.size),[0,0],0,1])
-                    ControllerVar.bulletlist.append([obj[1],pygame.Rect(obj[1][0],obj[1][1],ControllerVar.size,ControllerVar.size),[0,0],1,1])
-                    ControllerVar.bulletlist.append([obj[1],pygame.Rect(obj[1][0],obj[1][1],ControllerVar.size,ControllerVar.size),[0,0],7,1])
-                case "Rook":
-                    ControllerVar.bulletlist.append([obj[1],pygame.Rect(obj[1][0],obj[1][1],ControllerVar.size,ControllerVar.size),[0,0],0,10])
-                    ControllerVar.bulletlist.append([obj[1],pygame.Rect(obj[1][0],obj[1][1],ControllerVar.size,ControllerVar.size),[0,0],2,10])
-                    ControllerVar.bulletlist.append([obj[1],pygame.Rect(obj[1][0],obj[1][1],ControllerVar.size,ControllerVar.size),[0,0],4,10])
-                    ControllerVar.bulletlist.append([obj[1],pygame.Rect(obj[1][0],obj[1][1],ControllerVar.size,ControllerVar.size),[0,0],6,10])
-                case "Bishop":
-                    ControllerVar.bulletlist.append([obj[1],pygame.Rect(obj[1][0],obj[1][1],ControllerVar.size,ControllerVar.size),[0,0],1,10])
-                    ControllerVar.bulletlist.append([obj[1],pygame.Rect(obj[1][0],obj[1][1],ControllerVar.size,ControllerVar.size),[0,0],3,10])
-                    ControllerVar.bulletlist.append([obj[1],pygame.Rect(obj[1][0],obj[1][1],ControllerVar.size,ControllerVar.size),[0,0],5,10])
-                    ControllerVar.bulletlist.append([obj[1],pygame.Rect(obj[1][0],obj[1][1],ControllerVar.size,ControllerVar.size),[0,0],7,10])
-                case "Queen":
-                    ControllerVar.bulletlist.append([obj[1],pygame.Rect(obj[1][0],obj[1][1],ControllerVar.size,ControllerVar.size),[0,0],0,10])
-                    ControllerVar.bulletlist.append([obj[1],pygame.Rect(obj[1][0],obj[1][1],ControllerVar.size,ControllerVar.size),[0,0],1,10])
-                    ControllerVar.bulletlist.append([obj[1],pygame.Rect(obj[1][0],obj[1][1],ControllerVar.size,ControllerVar.size),[0,0],2,10])
-                    ControllerVar.bulletlist.append([obj[1],pygame.Rect(obj[1][0],obj[1][1],ControllerVar.size,ControllerVar.size),[0,0],3,10])
-                    ControllerVar.bulletlist.append([obj[1],pygame.Rect(obj[1][0],obj[1][1],ControllerVar.size,ControllerVar.size),[0,0],4,10])
-                    ControllerVar.bulletlist.append([obj[1],pygame.Rect(obj[1][0],obj[1][1],ControllerVar.size,ControllerVar.size),[0,0],5,10])
-                    ControllerVar.bulletlist.append([obj[1],pygame.Rect(obj[1][0],obj[1][1],ControllerVar.size,ControllerVar.size),[0,0],6,10])
-                    ControllerVar.bulletlist.append([obj[1],pygame.Rect(obj[1][0],obj[1][1],ControllerVar.size,ControllerVar.size),[0,0],7,10])
-                case "King":
-                    ControllerVar.bulletlist.append([obj[1],pygame.Rect(obj[1][0],obj[1][1],ControllerVar.size,ControllerVar.size),[0,0],0,1])
-                    ControllerVar.bulletlist.append([obj[1],pygame.Rect(obj[1][0],obj[1][1],ControllerVar.size,ControllerVar.size),[0,0],1,1])
-                    ControllerVar.bulletlist.append([obj[1],pygame.Rect(obj[1][0],obj[1][1],ControllerVar.size,ControllerVar.size),[0,0],2,1])
-                    ControllerVar.bulletlist.append([obj[1],pygame.Rect(obj[1][0],obj[1][1],ControllerVar.size,ControllerVar.size),[0,0],3,1])
-                    ControllerVar.bulletlist.append([obj[1],pygame.Rect(obj[1][0],obj[1][1],ControllerVar.size,ControllerVar.size),[0,0],4,1])
-                    ControllerVar.bulletlist.append([obj[1],pygame.Rect(obj[1][0],obj[1][1],ControllerVar.size,ControllerVar.size),[0,0],5,1])
-                    ControllerVar.bulletlist.append([obj[1],pygame.Rect(obj[1][0],obj[1][1],ControllerVar.size,ControllerVar.size),[0,0],6,1])
-                    ControllerVar.bulletlist.append([obj[1],pygame.Rect(obj[1][0],obj[1][1],ControllerVar.size,ControllerVar.size),[0,0],7,1])
-                case "Knight":
-                    ControllerVar.bulletlist.append([obj[1],pygame.Rect(obj[1][0],obj[1][1],ControllerVar.size,ControllerVar.size),[0,0],8,2])
-                    ControllerVar.bulletlist.append([obj[1],pygame.Rect(obj[1][0],obj[1][1],ControllerVar.size,ControllerVar.size),[0,0],9,2])
-                    ControllerVar.bulletlist.append([obj[1],pygame.Rect(obj[1][0],obj[1][1],ControllerVar.size,ControllerVar.size),[0,0],10,2])
-                    ControllerVar.bulletlist.append([obj[1],pygame.Rect(obj[1][0],obj[1][1],ControllerVar.size,ControllerVar.size),[0,0],11,2])
-                    ControllerVar.bulletlist.append([obj[1],pygame.Rect(obj[1][0],obj[1][1],ControllerVar.size,ControllerVar.size),[0,0],12,2])
-                    ControllerVar.bulletlist.append([obj[1],pygame.Rect(obj[1][0],obj[1][1],ControllerVar.size,ControllerVar.size),[0,0],13,2])
-                    ControllerVar.bulletlist.append([obj[1],pygame.Rect(obj[1][0],obj[1][1],ControllerVar.size,ControllerVar.size),[0,0],14,2])
-                    ControllerVar.bulletlist.append([obj[1],pygame.Rect(obj[1][0],obj[1][1],ControllerVar.size,ControllerVar.size),[0,0],15,2])
-
+        
         for bullet in ControllerVar.bulletlist:
             pos = bullet[0]
             rect = pygame.Rect(bullet[1].x, bullet[1].y, bullet[1].height/3, bullet[1].width/3)
@@ -363,7 +396,10 @@ while True:
             direction = bullet[3]
             distance = bullet[4]
             rect.x = (pos[0]*ControllerVar.size+ControllerVar.WINDOW_SIZE[0]/4)+ControllerVar.size/3+change[0]
-            rect.y = (pos[1]*ControllerVar.size+40)+ControllerVar.size/3 + change[1]
+            if bullet[5] == True:
+                rect.y = (pos[1]*ControllerVar.size+40)+ControllerVar.size/1.5 + change[1]
+            else:
+                rect.y = (pos[1]*ControllerVar.size+40)+ControllerVar.size/3 + change[1]
             
             match direction:
                 case 0:
@@ -432,26 +468,50 @@ while True:
         match PlayerVar.biome:
             case "Default":
                 Images.tiles = [Images.white, Images.black]
-                PlayerVar.wading = False
+                #PlayerVar.wading = False
             case "Outside":
                 Images.tiles = [Images.grassL, Images.grassD]
-                PlayerVar.wading = False
+                #PlayerVar.wading = False
             case "Cultist":
                 Images.tiles = [Images.stoneL, Images.stoneD]
                 ControllerVar.screen.blit(Images.vignette, (0,0))
                 ControllerVar.screen.blit(Images.vignette2, (0,0))
-                PlayerVar.wading = False
+                #PlayerVar.wading = False
             case "Cave":
                 Images.tiles = [Images.dirtL, Images.dirtD]
-                PlayerVar.wading = False
+                #PlayerVar.wading = False
             case "Swamp":
-                Images.tiles = [Images.animateWater(Images.waterL,Images.waterD)[0], Images.animateWater(Images.waterL,Images.waterD)[1]]
-                PlayerVar.wading = True
+                Images.tiles = [Images.swampL,Images.swampD]
+                #Images.tiles = [Images.animateWater(Images.waterL,Images.waterD)[0], Images.animateWater(Images.waterL,Images.waterD)[1]]
+                #PlayerVar.wading = True
 
         
         text = Text.font.render(str(PlayerVar.points), False, (255,255,255))
         
-        pygame.draw.rect(ControllerVar.screen, (255,0,0), (Text.textRect.x, Text.textRect.y, PlayerVar.points/200*ControllerVar.WINDOW_SIZE[0]/5, ControllerVar.WINDOW_SIZE[1]/10))
+        if PlayerVar.points > -1 and PlayerVar.points < 6:
+            pygame.draw.rect(ControllerVar.screen, (255,0,0), (Text.textRect.x, Text.textRect.y, PlayerVar.points/5*ControllerVar.WINDOW_SIZE[0]/5, ControllerVar.WINDOW_SIZE[1]/10))
+        elif PlayerVar.points > 5 and PlayerVar.points < 16:
+            pygame.draw.rect(ControllerVar.screen, (255,0,0), (Text.textRect.x, Text.textRect.y, ControllerVar.WINDOW_SIZE[0]/5,ControllerVar.WINDOW_SIZE[1]/10))
+
+            pygame.draw.rect(ControllerVar.screen, (255,122,0), (Text.textRect.x, Text.textRect.y, PlayerVar.points/15*ControllerVar.WINDOW_SIZE[0]/5, ControllerVar.WINDOW_SIZE[1]/10))
+        elif PlayerVar.points > 15 and PlayerVar.points < 31:
+            pygame.draw.rect(ControllerVar.screen, (255,122,0), (Text.textRect.x, Text.textRect.y, ControllerVar.WINDOW_SIZE[0]/5,ControllerVar.WINDOW_SIZE[1]/10))
+
+            pygame.draw.rect(ControllerVar.screen, (255,255,0), (Text.textRect.x, Text.textRect.y, PlayerVar.points/30*ControllerVar.WINDOW_SIZE[0]/5, ControllerVar.WINDOW_SIZE[1]/10))
+        elif PlayerVar.points > 30 and PlayerVar.points < 61:
+            pygame.draw.rect(ControllerVar.screen, (255,255,0), (Text.textRect.x, Text.textRect.y, ControllerVar.WINDOW_SIZE[0]/5,ControllerVar.WINDOW_SIZE[1]/10))
+
+            pygame.draw.rect(ControllerVar.screen, (0,255,122), (Text.textRect.x, Text.textRect.y, PlayerVar.points/60*ControllerVar.WINDOW_SIZE[0]/5, ControllerVar.WINDOW_SIZE[1]/10))
+        elif PlayerVar.points > 60 and PlayerVar.points < 121:
+            pygame.draw.rect(ControllerVar.screen, (0,255,122), (Text.textRect.x, Text.textRect.y, ControllerVar.WINDOW_SIZE[0]/5,ControllerVar.WINDOW_SIZE[1]/10))
+
+            pygame.draw.rect(ControllerVar.screen, (0,0,255), (Text.textRect.x, Text.textRect.y, PlayerVar.points/120*ControllerVar.WINDOW_SIZE[0]/5, ControllerVar.WINDOW_SIZE[1]/10))
+        elif PlayerVar.points > 120 and PlayerVar.points < 241:
+            pygame.draw.rect(ControllerVar.screen, (0,0,255), (Text.textRect.x, Text.textRect.y, ControllerVar.WINDOW_SIZE[0]/5,ControllerVar.WINDOW_SIZE[1]/10))
+
+            pygame.draw.rect(ControllerVar.screen, (255,0,255), (Text.textRect.x, Text.textRect.y, PlayerVar.points/240*ControllerVar.WINDOW_SIZE[0]/5, ControllerVar.WINDOW_SIZE[1]/10))
+        else:
+            pygame.draw.rect(ControllerVar.screen, (255,0,255), (Text.textRect.x, Text.textRect.y, ControllerVar.WINDOW_SIZE[0]/5,ControllerVar.WINDOW_SIZE[1]/10))
         ControllerVar.screen.blit(text,(ControllerVar.WINDOW_SIZE[0]/1.175,ControllerVar.WINDOW_SIZE[1]/12))
         ControllerVar.screen.blit(Images.bar, Text.textRect)
 

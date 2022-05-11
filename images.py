@@ -123,6 +123,10 @@ class Images:
     loadrook = pygame.image.load('Assets\Chess Pieces\Enemy Rook.png').convert()
     loadrook.set_colorkey((0,0,0))
     rook = pygame.transform.scale(loadrook, (ControllerVar.size,ControllerVar.size))
+    loadrookswim = pygame.image.load('Assets\Chess Pieces\RookInLiquid.png').convert()
+    loadrookswim.set_colorkey((0,0,0))
+    rookswim = pygame.transform.scale(loadrookswim, (ControllerVar.size,ControllerVar.size))  
+
 
     # Tiles
     loaddarkgrass = pygame.image.load('Assets\Tiles\Dark Grass.png').convert()
@@ -153,27 +157,28 @@ class Images:
     loadlightdirt.set_colorkey((0,0,0))
     dirtL = pygame.transform.scale(loadlightdirt, (ControllerVar.size,ControllerVar.size))
 
+    loaddarkswamp = pygame.image.load('Assets\Tiles\Dark Swamp.png').convert()
+    loaddarkswamp.set_colorkey((0,0,0))
+    swampD = pygame.transform.scale(loaddarkswamp, (ControllerVar.size,ControllerVar.size))
+    loadlightswamp = pygame.image.load('Assets\Tiles\Light Swamp.png').convert()
+    loadlightswamp.set_colorkey((0,0,0))
+    swampL = pygame.transform.scale(loadlightswamp, (ControllerVar.size,ControllerVar.size))
+
 
     waterD = pygame.image.load('Assets\Tiles\waterdark1.png').convert()
 
     waterL = pygame.image.load('Assets\Tiles\waterdark1.png').convert()
 
 
-    def animateWater(waterL,waterD):
+    def animate(image1, image2):
         if ControllerVar.tickrule % 2 == 0: #and ControllerVar.sametickrule == False:
-            loaddarkwater = pygame.image.load('Assets\Tiles\waterdark1.png').convert()
-            loaddarkwater.set_colorkey((0,0,0))
-            waterD = pygame.transform.scale(loaddarkwater, (ControllerVar.size,ControllerVar.size))
-            loadlightwater = pygame.image.load('Assets\Tiles\waterlight1.png').convert()
-            loadlightwater.set_colorkey((0,0,0))
-            waterL = pygame.transform.scale(loadlightwater, (ControllerVar.size,ControllerVar.size))
+            loadimage = pygame.image.load(image1).convert()
+            loadimage.set_colorkey((0,0,0))
+            image = pygame.transform.scale(loadimage, (ControllerVar.size,ControllerVar.size))
         elif ControllerVar.tickrule % 2 == 1: #and ControllerVar.sametickrule == False:
-            loaddarkwater = pygame.image.load('Assets\Tiles\waterdark2.png').convert()
-            loaddarkwater.set_colorkey((0,0,0))
-            waterD = pygame.transform.scale(loaddarkwater, (ControllerVar.size,ControllerVar.size))
-            loadlightwater = pygame.image.load('Assets\Tiles\waterlight2.png').convert()
-            loadlightwater.set_colorkey((0,0,0))
-            waterL = pygame.transform.scale(loadlightwater, (ControllerVar.size,ControllerVar.size))
-        return waterL,waterD
+            loadimage = pygame.image.load(image2).convert()
+            loadimage.set_colorkey((0,0,0))
+            image = pygame.transform.scale(loadimage, (ControllerVar.size,ControllerVar.size))
+        return image
 
     tiles = [white, black]
