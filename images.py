@@ -2,7 +2,6 @@ import pygame
 from pygame.locals import *
 pygame.init()
 from variables import *
-
 class Images:
     # Objects
     loadchest = pygame.image.load('Assets\Misc\Chest.png').convert()
@@ -16,6 +15,14 @@ class Images:
     loadwall = pygame.image.load('Assets\Tiles\Dark Stone.png').convert()
     loadwall.set_colorkey((0,0,0))
     wall = pygame.transform.scale(loadwall, (ControllerVar.size,ControllerVar.size))
+
+    loadgravestone = pygame.image.load('Assets\Misc\Gravestone 1.png').convert()
+    loadgravestone.set_colorkey((0,0,0))
+    gravestone = pygame.transform.scale(loadgravestone, (ControllerVar.size,ControllerVar.size))
+
+    loadtree = pygame.image.load('Assets\Tiles\Tree_tile.png').convert()
+    loadtree.set_colorkey((0,0,0))
+    tree = pygame.transform.scale(loadtree, (ControllerVar.size,ControllerVar.size*2))
 
     loadstairs = pygame.image.load('Assets\Tiles\Trapdoor.png').convert()
     loadstairs.set_colorkey((0,0,0))
@@ -73,6 +80,35 @@ class Images:
     loadvignette2.set_colorkey((0,0,0))
     loadvignette.set_alpha(200)
     vignette2 = pygame.transform.scale(loadvignette2, ControllerVar.WINDOW_SIZE)
+
+    loadfog = pygame.image.load('Assets\Misc\Fog.png').convert()
+    loadfog.set_colorkey((0,0,0))
+    loadfog.set_alpha(150)
+    fog = pygame.transform.scale(loadfog, ControllerVar.WINDOW_SIZE)
+
+    loadfog2 = pygame.image.load('Assets\Misc\Fog2.png').convert()
+    loadfog2.set_colorkey((0,0,0))
+    loadfog2.set_alpha(150)
+    fog2 = pygame.transform.scale(loadfog2, ControllerVar.WINDOW_SIZE)
+
+    loadfog3 = pygame.image.load('Assets\Misc\Fog3.png').convert()
+    loadfog3.set_colorkey((0,0,0))
+    loadfog3.set_alpha(150)
+    fog3 = pygame.transform.scale(loadfog3, ControllerVar.WINDOW_SIZE)
+
+    loadfog4 = pygame.image.load('Assets\Misc\Fog4.png').convert()
+    loadfog4.set_colorkey((0,0,0))
+    loadfog4.set_alpha(150)
+    fog4 = pygame.transform.scale(loadfog4, ControllerVar.WINDOW_SIZE)
+
+    fogpos = 0
+    fogpos2 = ControllerVar.WINDOW_SIZE[0]
+    fogpos3 = 0
+    fogpos4 = ControllerVar.WINDOW_SIZE[0]
+
+    loadcentre = pygame.image.load('Assets\Misc\Centreer.png').convert()
+    loadcentre.set_colorkey((0,0,0))
+    centre = pygame.transform.scale(loadcentre, ControllerVar.screen.get_size())
 
     # Player
     loadplayer = pygame.image.load('Assets\Chess Pieces\Pawn.png').convert()
@@ -164,6 +200,13 @@ class Images:
     loadlightswamp.set_colorkey((0,0,0))
     swampL = pygame.transform.scale(loadlightswamp, (ControllerVar.size,ControllerVar.size))
 
+    loaddarkgraveyard = pygame.image.load('Assets\Tiles\Dark Graveyard.png').convert()
+    loaddarkgraveyard.set_colorkey((0,0,0))
+    graveyardD = pygame.transform.scale(loaddarkgraveyard, (ControllerVar.size,ControllerVar.size))
+    loadlightgraveyard = pygame.image.load('Assets\Tiles\Light Graveyard.png').convert()
+    loadlightgraveyard.set_colorkey((0,0,0))
+    graveyardL = pygame.transform.scale(loadlightgraveyard, (ControllerVar.size,ControllerVar.size))
+
 
     waterD = pygame.image.load('Assets\Tiles\waterdark1.png').convert()
 
@@ -182,3 +225,25 @@ class Images:
         return image
 
     tiles = [white, black]
+
+    def fogLevel(level):
+        if level >= 1:
+            ControllerVar.screen.blit(Images.fog, (Images.fogpos,0))
+            Images.fogpos -= 0.05
+            if Images.fogpos < -ControllerVar.WINDOW_SIZE[0]:
+                Images.fogpos = ControllerVar.WINDOW_SIZE[0]
+        if level >= 2:
+            ControllerVar.screen.blit(Images.fog2, (Images.fogpos2,0))
+            Images.fogpos2 -= 0.025
+            if Images.fogpos2 < -ControllerVar.WINDOW_SIZE[0]:
+                Images.fogpos2 = ControllerVar.WINDOW_SIZE[0]
+        if level >= 3:
+            ControllerVar.screen.blit(Images.fog3, (Images.fogpos3,0))
+            Images.fogpos3 -= 0.01
+            if Images.fogpos3 < -ControllerVar.WINDOW_SIZE[0]:
+                Images.fogpos3 = ControllerVar.WINDOW_SIZE[0]
+        if level >= 4:
+            ControllerVar.screen.blit(Images.fog4, (Images.fogpos4,0))
+            Images.fogpos4 -= 0.005   
+            if Images.fogpos4 < -ControllerVar.WINDOW_SIZE[0]:
+                Images.fogpos4 = ControllerVar.WINDOW_SIZE[0]

@@ -24,23 +24,67 @@ class Refugee:
     def handleRefugee():
         if Text.txtopen:
             if Text.nbtNum < len(Text.nbt):
-                if Text.globalnum < len(Text.Dialougues[Text.nbt[Text.nbtNum]]):
-                    CurrentDialougue = Text.Dialougues[Text.nbt[Text.nbtNum]]
+                if Text.globalnum < len(Text.nbt[Text.nbtNum]):
+                    CurrentDialougue = Text.nbt[Text.nbtNum]
                     if CurrentDialougue[Text.globalnum] != " " and len(CurrentDialougue) > Text.globalnum:
                         if ControllerVar.tick % 23 == 0:
                             Text.globalstring += CurrentDialougue[Text.globalnum]
                             Text.globalnum += 1
-                            pygame.mixer.Sound.stop(Text.voice)
-                            pygame.mixer.Sound.play(Text.voice, 0, 0, 0)
+                            if Text.voice != "":
+                                pygame.mixer.Sound.stop(Text.voice)
+                                pygame.mixer.Sound.play(Text.voice, 0, 0, 0)
                     else:
                         if ControllerVar.tick % 23 == 0:
                             Text.globalstring += CurrentDialougue[Text.globalnum]
                             Text.globalnum += 1
-                            pygame.mixer.Sound.stop(Text.voice)
+                            if Text.voice != "":
+                                pygame.mixer.Sound.stop(Text.voice)
             else:
                 Text.txtopen = False
                 Text.globalnum = 0
                 Text.globalstring = ""
                 Text.nbtNum = 0
             
-            
+def enemyShoot(firedBy, obj):
+    match firedBy:
+        case "Pawn": 
+            ControllerVar.bulletlist.append([obj[1],[0,0],[0,0.5],1,obj[5]])
+            ControllerVar.bulletlist.append([obj[1],[0,0],[-0.5,0.5],1,obj[5]])
+            ControllerVar.bulletlist.append([obj[1],[0,0],[0.5,0.5],1, obj[5]])
+        case "Rook":
+            ControllerVar.bulletlist.append([obj[1], [0,0],[0,0.5],10,obj[5]])
+            ControllerVar.bulletlist.append([obj[1], [0,0],[-0.5,0],10,obj[5]])
+            ControllerVar.bulletlist.append([obj[1], [0,0],[0,-0.5],10, obj[5]])
+            ControllerVar.bulletlist.append([obj[1], [0,0],[0.5,0],10, obj[5]])
+        case "Bishop":
+            ControllerVar.bulletlist.append([obj[1], [0,0],[-0.5,0.5],10, obj[5]])
+            ControllerVar.bulletlist.append([obj[1], [0,0],[-0.5,-0.5],10, obj[5]])
+            ControllerVar.bulletlist.append([obj[1], [0,0],[-0.5,0.5],10, obj[5]])
+            ControllerVar.bulletlist.append([obj[1], [0,0],[0.5,0.5],10, obj[5]])
+        case "Queen":
+            ControllerVar.bulletlist.append([obj[1], [0,0],[0,0.5],10, obj[5]])
+            ControllerVar.bulletlist.append([obj[1], [0,0],[-0.5,0.5],10, obj[5]])
+            ControllerVar.bulletlist.append([obj[1], [0,0],[-0.5,0],10, obj[5]])
+            ControllerVar.bulletlist.append([obj[1], [0,0],[-0.5,-0.5],10, obj[5]])
+            ControllerVar.bulletlist.append([obj[1], [0,0],[0,-0.5],10, obj[5]])
+            ControllerVar.bulletlist.append([obj[1], [0,0],[-0.5,0.5],10, obj[5]])
+            ControllerVar.bulletlist.append([obj[1], [0,0],[0.5,0],10, obj[5]])
+            ControllerVar.bulletlist.append([obj[1], [0,0],[0.5,0.5],10, obj[5]])
+        case "King":
+            ControllerVar.bulletlist.append([obj[1], [0,0],[0,0.5],1, obj[5]])
+            ControllerVar.bulletlist.append([obj[1], [0,0],[-0.5,0.5],1, obj[5]])
+            ControllerVar.bulletlist.append([obj[1], [0,0],[-0.5,0],1, obj[5]])
+            ControllerVar.bulletlist.append([obj[1], [0,0],[-0.5,-0.5],1, obj[5]])
+            ControllerVar.bulletlist.append([obj[1], [0,0],[0,-0.5],1, obj[5]])
+            ControllerVar.bulletlist.append([obj[1], [0,0],[-0.5,0.5],1, obj[5]])
+            ControllerVar.bulletlist.append([obj[1], [0,0],[0.5,0],1, obj[5]])
+            ControllerVar.bulletlist.append([obj[1], [0,0],[0.5,0.5],1, obj[5]])
+        case "Knight":
+            ControllerVar.bulletlist.append([obj[1], [0,0],[0.25,0.5],2, obj[5]])
+            ControllerVar.bulletlist.append([obj[1], [0,0],[-0.25,-0.5],2, obj[5]])
+            ControllerVar.bulletlist.append([obj[1], [0,0],[0.5,0.25],2, obj[5]])
+            ControllerVar.bulletlist.append([obj[1], [0,0],[-0.5,0.25],2, obj[5]])
+            ControllerVar.bulletlist.append([obj[1], [0,0],[0.25,-0.5],2, obj[5]])
+            ControllerVar.bulletlist.append([obj[1], [0,0],[-0.25,-0.5],2, obj[5]])
+            ControllerVar.bulletlist.append([obj[1], [0,0],[0.5,-0.25],2, obj[5]])
+            ControllerVar.bulletlist.append([obj[1], [0,0],[-0.5,-0.25],2, obj[5]])

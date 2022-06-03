@@ -1,4 +1,4 @@
-import pygame, time
+import pygame, time, os
 from pygame.locals import *
 pygame.init()
 
@@ -11,10 +11,18 @@ class ControllerVar:
     tick = 0
     tickrule = 0
     sametickrule = False
-    screen = pygame.display.set_mode((0,0), pygame.FULLSCREEN)
+    #display = pygame.display.set_mode((1920,1080))
+    screen = pygame.display.set_mode((1000,667), pygame.RESIZABLE + pygame.SCALED)
+    #pygame.display.set_mode((1080,720), pygame.RESIZABLE + pygame.SCALED)
     WINDOW_SIZE = (pygame.display.get_surface().get_size())
     size = round(WINDOW_SIZE[1]/9)
     gameover = False
+    ASPECT_RATIO = 3 / 2
+
+def resizeDisplay(thing1, thing2, thing3):
+    thing1 = pygame.display.set_mode((1080,720), pygame.RESIZABLE)
+    thing2 = (pygame.display.get_surface().get_size())
+    thing3 = round(thing2[1]/9)
 
 class ChessVar:
     chesstiles = [] # Chess Board
